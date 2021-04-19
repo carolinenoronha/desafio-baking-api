@@ -1,9 +1,40 @@
 defmodule BankingApi do
-  @moduledoc """
-  BankingApi keeps the contexts that define your domain
-  and business logic.
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  import Ecto.Query
+
+  alias BankingApi.Accounts.Schemas.Account
+  alias BankingApi.Operations.Schemas.Operation
+  alias BankingApi.Repo
+
+  def withdraw(account_id, value) do
+
+      Repo.transaction(fn ->
+
+        query = from a in BankingApi.Accounts.Schemas.Account, where: a.id == ^account_id , lock: "FOR UPDATE"
+
+
+        account = Repo.one(query)
+        if not is_nil(account) do
+        Account.changeset(account, %{balance: account.balance - value})
+        |> Repo.update()
+        |> case do
+          {:ok, _} -> :ok
+          {:error, changeset} -> Repo.rollback(changeset)
+        end
+        else
+        Repo.rollback(:account_not_found)
+
+        end
+
+        Operation.changeset(%{type: "Withdraw", value: value, account_id: account.id})
+        |> Repo.insert()
+        |> case do
+          {:ok, _} -> :ok
+          {:error, changeset} -> Repo.rollback(changeset)
+        end
+
+      end)
+
+  end
+
 end
