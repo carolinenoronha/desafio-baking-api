@@ -5,12 +5,12 @@ defmodule BankingApi.OperationsTest do
   alias BankingApi.Accounts.Schemas.Account
   alias BankingApi
 
-  test "withdraw " do
+  test "withdraw with valid value" do
     ac = %BankingApi.Accounts.Schemas.Account{
-      balance: :integer
+      balance: 100
     }
 
-    assert {:ok, _} = BankingApi.withdraw(90, ac)
+    {:ok,_} = BankingApi.withdraw(1, ac)
   end
 
 end

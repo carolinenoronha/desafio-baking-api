@@ -6,7 +6,9 @@ defmodule BankingApi.Repo.Migrations.Operations do
       add :id, :uuid, primary_key: true
       add :value, :integer, null: false
       add :type, :string, null: false
-      add :account_id, references(:accounts, type: :uuid), null: false
+      add :source_account_id, references(:accounts, type: :uuid), null: false
+      add :target_account_id, references(:accounts, type: :uuid), null: false
+
 
       timestamps()
     end
