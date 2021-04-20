@@ -12,7 +12,8 @@ defmodule BankingApi.Operations.Schemas.Operation do
 
     field :value, :integer
     field :type, :string
-    belongs_to :account, BankingApi.Accounts.Schemas.Account, type: Ecto.UUID
+    belongs_to :source_account, BankingApi.Accounts.Schemas.Account, type: Ecto.UUID
+    belongs_to :target_account, BankingApi.Accounts.Schemas.Account, type: Ecto.UUID
 
     timestamps()
   end
@@ -20,6 +21,6 @@ defmodule BankingApi.Operations.Schemas.Operation do
 
   def changeset(model\\%__MODULE__{}, params) do
     model
-    |> cast(params, [:id, :value, :type, :account_id])
+    |> cast(params, [:id, :value, :type, :source_account_id, :target_account_id])
   end
 end
