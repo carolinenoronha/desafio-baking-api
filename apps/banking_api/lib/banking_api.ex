@@ -7,7 +7,6 @@ defmodule BankingApi do
 
   @assets_account_id "47616e06-e26e-46a9-a9e4-ed5d04d4b129"
 
-  #Switch variables name for pattern
 
   def withdraw(source_account_id, value) do
     Repo.transaction(fn ->
@@ -114,19 +113,18 @@ defmodule BankingApi do
     end)
   end
 
-  #Change variables name - switch to snake case
 
   def transfer(source_account_id, target_account_id, value) do
     Repo.transaction(fn ->
-      sourceQuery =
+      source_query =
         from a in BankingApi.Accounts.Schemas.Account,
           where: a.id == ^source_account_id,
           lock: "FOR UPDATE"
 
-      sourceAccount = Repo.one(sourceQuery)
+      source_account = Repo.one(source_query)
 
-      if not is_nil(sourceAccount) do
-        Account.changeset(sourceAccount, %{balance: sourceAccount.balance - value})
+      if not is_nil(source_account) do
+        Account.changeset(source_account, %{balance: source_account.balance - value})
         |> Repo.update()
         |> case do
           {:ok, _} -> :ok
@@ -136,15 +134,15 @@ defmodule BankingApi do
         Repo.rollback(:account_not_found)
       end
 
-      targetQuery =
+      target_query =
         from a in BankingApi.Accounts.Schemas.Account,
           where: a.id == ^target_account_id,
           lock: "FOR UPDATE"
 
-      targetAccount = Repo.one(targetQuery)
+      target_account = Repo.one(target_query)
 
-      if not is_nil(targetAccount) do
-        Account.changeset(targetAccount, %{balance: targetAccount.balance + value})
+      if not is_nil(target_account) do
+        Account.changeset(target_account, %{balance: target_account.balance + value})
         |> Repo.update()
         |> case do
           {:ok, _} -> :ok
@@ -157,8 +155,8 @@ defmodule BankingApi do
       Operation.changeset(%{
         type: "Transfer",
         value: value,
-        target_account_id: targetAccount.id,
-        source_account_id: sourceAccount.id
+        target_account_id: target_account.id,
+        source_account_id: source_account.id
       })
       |> Repo.insert()
       |> case do
