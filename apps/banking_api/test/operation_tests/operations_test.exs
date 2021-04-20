@@ -5,12 +5,12 @@ defmodule BankingApi.OperationsTest do
   alias BankingApi.Accounts.Schemas.Account
   alias BankingApi
 
-  test "withdraw with valid value" do
-    ac = %BankingApi.Accounts.Schemas.Account{
-      balance: 100
-    }
 
-    {:ok,_} = BankingApi.withdraw(1, ac)
-  end
+  #Test if de balance between default account and other accounts equals zero
+  #Test if a withdraw with positive balance is ok
+  #Test if a deposit is ok
+  #Test if a transfer with de default account being a target or a source is denied
+
+
 
 end
