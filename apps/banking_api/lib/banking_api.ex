@@ -164,7 +164,7 @@ end
   end
 
   def create_account do
-    Repo.insert(%BankingApi.Accounts.Schemas.Account{balance: 1000})
+    Repo.insert(%BankingApi.Accounts.Schemas.Account{balance: 100})
   end
 
 end
