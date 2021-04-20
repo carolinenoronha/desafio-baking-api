@@ -2,6 +2,8 @@ defmodule BankingApi.Repo.Migrations.CreateAccount do
 
   use Ecto.Migration
 
+  #Remember to switch balance to bigint before deadline
+
   def change do
     create table(:accounts, primary_key: false) do
       add :id, :uuid, primary_key: true
